@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Content from Contact.prisma
+
+
+// Content from Contact.prisma
+
+
+// Content from Contact.prisma
+
+
+// Content from Contact.prisma
+
+
+// Content from Contact.prisma
+
+
+// Content from User.prisma
+
+
+// Content from User.prisma
+
+
+// Content from User.prisma
+
+
+
+// Content from Contact.prisma
+model Device {
+  id        Int          @id @default(autoincrement())
+  name      String
+  deviceId  String       @unique
+  phone     BigInt       @unique
+  type      Type         @default(BASIC)
+  status    DeviceStatus @default(UNAUTHENTICATED)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  Contact Contact[]
+}
+
+// Content from Contact.prisma
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     BigInt   @unique
+  deviceId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  device Device @relation(fields: [deviceId], references: [id])
+  Chat   Chat[]
+}
+
+// Content from Contact.prisma
+model Chat {
+  id        Int      @id @default(autoincrement())
+  contactId Int      @unique
+  messages  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contact Contact @relation(fields: [contactId], references: [id])
+}
+
+// Content from Contact.prisma
+enum Type {
+  BASIC
+  BUSINESS
+}
+
+// Content from Contact.prisma
+enum DeviceStatus {
+  UNAUTHENTICATED
+  AUTHENTICATED
+}
+
+// Content from User.prisma
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  firstName String?
+  lastName  String?
+  role      Role     @default(USER)
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Content from User.prisma
+enum Role {
+  ADMIN
+  USER
+  MODERATOR
+}
+
+// Content from User.prisma
+enum Status {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}

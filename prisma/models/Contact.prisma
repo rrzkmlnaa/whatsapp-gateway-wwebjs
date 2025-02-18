@@ -1,0 +1,44 @@
+model Device {
+  id        Int          @id @default(autoincrement())
+  name      String
+  deviceId  String       @unique
+  phone     BigInt       @unique
+  type      Type         @default(BASIC)
+  status    DeviceStatus @default(UNAUTHENTICATED)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  Contact Contact[]
+}
+
+enum Type {
+  BASIC
+  BUSINESS
+}
+
+enum DeviceStatus {
+  UNAUTHENTICATED
+  AUTHENTICATED
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     BigInt   @unique
+  deviceId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  device Device @relation(fields: [deviceId], references: [id])
+  Chat   Chat[]
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  contactId Int      @unique
+  messages  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contact Contact @relation(fields: [contactId], references: [id])
+}
